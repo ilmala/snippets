@@ -6247,4 +6247,26 @@ span.CodeMirror-selectedtext {
   text-decoration: underline;
   color: white !important; }
 
+body {
+  font-family: 'Open Sans', sans-serif; }
+
+.github-login {
+  text-align: center;
+  padding: 120px 0; }
+
+.btn-github-login {
+  background-color: #222;
+  color: #fff;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 300ms ease-in-out; }
+  .btn-github-login:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: #DDB641; }
+  .btn-github-login img {
+    width: 32px; }
+
 /*# sourceMappingURL=app.css.map */
