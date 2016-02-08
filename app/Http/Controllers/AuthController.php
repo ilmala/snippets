@@ -46,6 +46,6 @@ class AuthController extends Controller
 
       auth()->login($user);
 
-      return redirect('/');
+      return redirect('/gists');
   }
 }

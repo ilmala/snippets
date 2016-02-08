@@ -11,14 +11,18 @@ use App\Repositories\Github\Gist;
 
 class GistsController extends Controller
 {
-    public function index(Gist $gist)
-    {
-      return view('gists.index')->withGists($gist->all());
-    }
+  public function __construct()
+  {
+    $this->middleware('auth');  
+  }
+  public function index(Gist $gist)
+  {
+    return view('gists.index')->withGists($gist->all());
+  }
 
-    public function show(Gist $gist, $id)
-    {
-      //dd($gist->show($id));
-      return view('gists.show')->withGist($gist->show($id));
-    }
+  public function show(Gist $gist, $id)
+  {
+    //dd($gist->show($id));
+    return view('gists.show')->withGist($gist->show($id));
+  }
 }

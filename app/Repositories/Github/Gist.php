@@ -35,7 +35,7 @@ class Gist
     ]);
     $client = new Client($httpClient);
     //dd($client);
-    $client->authenticate('29c29606627d0fc260b756f1c02b6ef8479eec9d', 'http_token');
+    $client->authenticate(auth()->user()->github_token, 'http_token');
 
     return $client;
   }
