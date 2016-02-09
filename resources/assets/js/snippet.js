@@ -1,5 +1,8 @@
 var Vue = require('vue');
+var _ = require('lodash');
+var github = require('octonode');
 var CodeMirror = require('codemirror');
+
 require('codemirror/addon/mode/loadmode')
 require('codemirror/mode/meta')
 require('codemirror/mode/htmlmixed/htmlmixed');
@@ -9,18 +12,18 @@ require('codemirror/mode/css/css');
 require('codemirror/mode/sass/sass');
 require('codemirror/mode/php/php');
 
+//Vue.config.debug = true;
+
 var snippetFile = Vue.extend({
   template: '#file',
+
   data: function(){
     return {
-      editor: '',
-      cm: null,
       mode: null
     }
   },
-  props: ['file', 'index'],
+  props: ['file', 'index', 'key'],
   ready(){
-
     this.mode = this.findMode(this.file.filename);
 
     this.cm = CodeMirror.fromTextArea(this.$els.ed, {
@@ -29,6 +32,11 @@ var snippetFile = Vue.extend({
       mode: this.mode,
       theme: "material"
     });
+
+    this.cm.on('change', function(cm) {
+      this.$set('file.content', cm.getValue());
+      // Add { silent: true }  as 3rd arg?
+    }.bind(this));
 
   },
   methods: {
@@ -51,7 +59,7 @@ var snippetFile = Vue.extend({
           spec = filename;
         }
       } else {
-        mode = spec = this.file.filename;
+        mode = spec = filename;
       }
 
       return mode;
@@ -60,14 +68,39 @@ var snippetFile = Vue.extend({
 });
 
 var app = new Vue({
-  el: '#files',
-  props: ['files', 'title'],
+  el: '#gist',
 
-  created() {
-    this.files = JSON.parse(this.files);
+  data: {
+    files: null,
+    description: ''
+  },
+
+  props: ['gistId', 'token'],
+
+  ready() {
+    var client = github.client(this.token);
+    var ghgist = client.gist();
+    ghgist.get(this.gistId, function(err, data, headers){
+      this.$set('files', data.files);
+      console.log(_.values(data.files));
+      this.description = data.description;
+    }.bind(this));
   },
 
   components: {
     'sn-file': snippetFile
+  },
+
+  methods: {
+    addFile: function(){
+      var file = {
+        filename: '',
+        content: '',
+        raw_url: null
+      }
+      //this.$nextTick(function () {
+        Vue.set(this.files, 'newfile', file);
+      //});
+    }
   }
 });
