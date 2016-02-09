@@ -17,11 +17,7 @@
         </span>
       </div>
 
-      <sn-file v-for="file in files" :file="file" :index="$index" :key="$key"></sn-file>
-
-      <div class="notify">
-        this is a long text user and other type notification ....
-      </div>
+      <sn-file v-for="file in files" :file.sync="file" :index="$index"></sn-file>
 
     </div>
 

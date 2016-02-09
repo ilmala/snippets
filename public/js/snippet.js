@@ -97322,7 +97322,7 @@ var snippetFile = Vue.extend({
       mode: null
     };
   },
-  props: ['file', 'index', 'key'],
+  props: ['file', 'index'],
   ready: function ready() {
     this.mode = this.findMode(this.file.filename);
 
@@ -97381,8 +97381,8 @@ var app = new Vue({
     var client = github.client(this.token);
     var ghgist = client.gist();
     ghgist.get(this.gistId, function (err, data, headers) {
-      this.$set('files', data.files);
-      console.log(_.values(data.files));
+      console.log(data.files, _.map(data.files, this.parseFile));
+      this.$set('files', _.map(data.files, this.parseFile));
       this.description = data.description;
     }.bind(this));
   },
@@ -97393,15 +97393,21 @@ var app = new Vue({
   },
 
   methods: {
+    parseFile: function parseFile(file) {
+      return {
+        filename: file.filename,
+        content: file.content,
+        raw_url: file.raw_url
+      };
+    },
     addFile: function addFile() {
       var file = {
         filename: '',
         content: '',
-        raw_url: null
+        raw_url: null,
+        isNew: true
       };
-      //this.$nextTick(function () {
-      Vue.set(this.files, 'newfile', file);
-      //});
+      this.files.push(file);
     }
   }
 });
