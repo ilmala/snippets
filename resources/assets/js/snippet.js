@@ -72,7 +72,8 @@ var app = new Vue({
 
   data: {
     files: null,
-    description: ''
+    description: '',
+    newfilename: ''
   },
 
   props: ['gistId', 'token'],
@@ -101,12 +102,14 @@ var app = new Vue({
     },
     addFile: function(){
       var file = {
-        filename: '',
+        filename: this.newfilename,
         content: '',
         raw_url: null,
         isNew: true
       }
-      this.files.push(file)
+      this.files.push(file);
+      $(this.$els.modal).modal('hide');
+      this.newfilename='';
     }
   }
 });

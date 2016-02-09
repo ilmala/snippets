@@ -8,7 +8,7 @@
 
     <div id="gist" gist-id="{{$gist->id}}" token="{{Auth::user()->github_token}}">
 
-      <button @click="addFile()" class="btn btn-info" type="button"><i class="fa fa-plus"></i> Add Snippet</button>
+      <button class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> Add Snippet</button>
 
       <div class="input-group">
         <input type="text" v-model="description" class="form-control input-lg">
@@ -18,6 +18,26 @@
       </div>
 
       <sn-file v-for="file in files" :file.sync="file" :index="$index"></sn-file>
+
+      <div class="modal fade" v-el:modal="" id="myModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Add new snippet</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" v-model="newfilename" class="form-control" placeholder="filename ...">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button @click="addFile()" type="button" class="btn btn-primary"><i class="fa fa-check"></i> Add new file</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
     </div>
 
@@ -41,7 +61,7 @@
         </div>
         <div class="col-sm-2">
 
-          <a :href="file.raw_url" class="btn btn-default btn-block"><i class="fa fa-file-code-o"></i> Raw file</a>
+          <a v-if="file.raw_url" :href="file.raw_url" class="btn btn-default btn-block"><i class="fa fa-file-code-o"></i> Raw file</a>
 
         </div>
       </div>
